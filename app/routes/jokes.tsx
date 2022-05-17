@@ -1,6 +1,6 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import {json} from "@remix-run/node";
-import { Outlet, useLoaderData,Link } from "@remix-run/react";
+import { Outlet, useLoaderData,Link, Form } from "@remix-run/react";
 import {db} from "~/utils/db.server";
 import {getUser} from "~/utils/session.server";
 import stylesUrl from "~/styles/jokes.css";
@@ -47,9 +47,9 @@ export default function Jokesroute(){
                         data.user ? (
                             <div className="user-info">
                                 <span>{`Hi ${data.user.username}`}</span>
-                                <form method="post" action="/logout">
+                                <Form method="post" action="/logout">
                                     <button type="submit" className="button">Logout</button>
-                                </form>
+                                </Form>
                             </div>
                         ) : (<Link to="/login">Login</Link>)
                     }
@@ -63,7 +63,7 @@ export default function Jokesroute(){
                         <ul>
                         {data.jokeListItems.map((joke) => (
                             <li key={joke.id}>
-                            <Link to={joke.id}>{joke.name}</Link>
+                            <Link prefetch="intent" to={joke.id}>{joke.name}</Link>
                             </li>
                         ))}
                         </ul>

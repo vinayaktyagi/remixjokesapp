@@ -1,7 +1,7 @@
 import type {LinksFunction,MetaFunction} from "@remix-run/node";
 import {json,redirect} from "@remix-run/node";
 import type {ActionFunction} from "@remix-run/node";
-import {Link,useActionData,useSearchParams} from "@remix-run/react";
+import {Form, Link,useActionData,useSearchParams} from "@remix-run/react";
 import {db} from "~/utils/db.server";
 import stylesUrl from "~/styles/login.css";
 import {login,createUserSession,register} from "~/utils/session.server";
@@ -125,7 +125,7 @@ export default function Login(){
         <div className="container">
             <div className="content" data-light="">
                 <h1>Login</h1>
-                <form action="" method="post">
+                <Form action="" method="post">
                     <input type="hidden" name="redirectTo" value={searchParams.get("redirectTo") ?? undefined}/>
                     <fieldset>
                         <legend className="sr-only">Login or Register?</legend>
@@ -186,7 +186,7 @@ export default function Login(){
                     <button type="submit" className="button">
                         Submit
                     </button>
-                </form>
+                </Form>
             </div>
             <div className="links">
                 <ul>

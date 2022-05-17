@@ -1,5 +1,5 @@
 import { LinksFunction,MetaFunction } from "@remix-run/node";
-import { LiveReload, Outlet ,Links,useCatch,Meta} from "@remix-run/react";
+import { LiveReload, Outlet ,Links,useCatch,Meta,Scripts} from "@remix-run/react";
 import stylesUrl from "~/styles/global.css";
 import stylesLargeUrl from "~/styles/global-large.css";
 import React from "react";
@@ -35,6 +35,7 @@ function Document({children, title = `Remix: So Great, It's Funny`}:{children:Re
       </head>
       <body>
         {children}
+        <Scripts/>
         <LiveReload />
       </body>
     </html>
@@ -64,6 +65,7 @@ export default function App(){
 // }
 
 export function ErrorBoundary({error}:{error:Error}){
+  console.log(error);
   return (
     <Document title="Uh-oh">
       <div className="error-container">

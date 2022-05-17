@@ -2,7 +2,7 @@ import type {Joke} from "@prisma/client";
 import type { LoaderFunction, ActionFunction, MetaFunction } from "@remix-run/node";
 import{json,redirect} from "@remix-run/node"; 
 import {db} from "~/utils/db.server";
-import { Link, useLoaderData, useParams, useCatch } from "@remix-run/react";
+import { Link, useLoaderData, useParams, useCatch, Form } from "@remix-run/react";
 import {getUserId, requireUserId } from "~/utils/session.server";
 
 type LoaderData = {
@@ -34,8 +34,9 @@ export const loader: LoaderFunction = async ({request,params}) => {
       status:404
     });
   }
-
+  // console.log(joke);
   const data:LoaderData = {joke, isOwner: joke.jokesterId === userId};
+  console.log(data);
   return json(data);
 }
 
@@ -60,17 +61,17 @@ export const action:ActionFunction = async ({request,params}) => {
 }
 
 export default function JokeRoute() {
-  const joke = useLoaderData();
+  const data = useLoaderData();
     return (
       <div>
         <p>Here's your hilarious joke:</p>
-        <p>{joke.content}</p>
-        <Link to=".">{joke.name} Permalink</Link>
-        {joke.isOwner && (
-          <form method="post">
+        <p>{data.joke.content}</p>
+        <Link to=".">{data.joke.name} Permalink</Link>
+        {data.isOwner && (
+          <Form method="post">
             <input type="hidden" name="_method" value="delete" />
             <button type="submit">Delete</button>
-          </form>
+          </Form>
         )}
         
       </div>
