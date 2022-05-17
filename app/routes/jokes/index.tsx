@@ -1,5 +1,5 @@
 import { json, LoaderFunction } from "@remix-run/node";
-import { useLoaderData,useCatch } from "@remix-run/react";
+import { useLoaderData,useCatch, Link } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -25,6 +25,9 @@ export default function JokesIndexRoute(){
           <p>
             {data.content}
           </p>
+          <div>
+            <Link reloadDocument to="/jokes.rss">Get RSS feed</Link>
+          </div>
         </div>
     );
 }
