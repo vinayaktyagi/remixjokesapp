@@ -1,4 +1,4 @@
-import type {LinksFunction} from "@remix-run/node";
+import type {LinksFunction,MetaFunction} from "@remix-run/node";
 import {json,redirect} from "@remix-run/node";
 import type {ActionFunction} from "@remix-run/node";
 import {Link,useActionData,useSearchParams} from "@remix-run/react";
@@ -9,7 +9,13 @@ import {login,createUserSession,register} from "~/utils/session.server";
 export const links:LinksFunction=()=>{
     return [{rel:"stylesheet",href:stylesUrl}];
 }
-
+export const meta: MetaFunction = () => {
+    return {
+      title: "Remix Jokes | Login",
+      description:
+        "Login to submit your own jokes to Remix Jokes!",
+    };
+};
 function validateUsername(username:string){
     if(typeof username !== "string" || username.length < 3){
         return "Username must be at least 3 characters long";
