@@ -4,7 +4,7 @@ import type {ActionFunction} from "@remix-run/node";
 import {Link,useActionData,useSearchParams} from "@remix-run/react";
 import {db} from "~/utils/db.server";
 import stylesUrl from "~/styles/login.css";
-import {login,createUserSession} from "~/utils/session.server";
+import {login,createUserSession,register} from "~/utils/session.server";
 
 export const links:LinksFunction=()=>{
     return [{rel:"stylesheet",href:stylesUrl}];
@@ -97,10 +97,11 @@ export const action:ActionFunction = async ({request}) => {
                     formError:"User ${username} already exists"
                 });
             }
-            return badRequest({
-                fields,
-                formError:"Register not implemented yet"
-            })
+           const user =await register({username,password});
+           if(!user){ 
+               return badRequest({fields, formError:"Something went wrong in the creation of new user"})
+        }
+           return createUserSession(user.id,redirectTo);
         }
         default :{
             return badRequest({
