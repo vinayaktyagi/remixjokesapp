@@ -1,5 +1,5 @@
 import { json, LoaderFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData,useCatch } from "@remix-run/react";
 import { db } from "~/utils/db.server";
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -9,7 +9,11 @@ export const loader: LoaderFunction = async ({ params }) => {
     skip: randomNumber,
     take:1
   });
-
+  if(!randomJoke){
+    throw new Response("No random joke found!",{
+      status:404
+    });
+  }
   return json(randomJoke);
 }
 
@@ -31,4 +35,18 @@ export function ErrorBoundary(){
       I did a whoopsie!
     </div>
   )
+}
+
+export function CatchBoundary(){
+  const caught = useCatch();
+
+  if(caught.status === 404){
+    return (
+      <div className="error-container">
+        There is no joke to display
+      </div>
+    )
+  }
+
+  throw new Error(`Unhandled Error: ${caught.status}`);
 }

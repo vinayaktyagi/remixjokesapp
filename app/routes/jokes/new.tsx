@@ -1,6 +1,6 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json,redirect } from "@remix-run/node";
-import { useActionData } from "@remix-run/react";
+import { Link, useActionData,useCatch } from "@remix-run/react";
 import {db} from "~/utils/db.server";
 import { requireUserId } from "~/utils/session.server";
 // interface MessageObject = {
@@ -38,7 +38,13 @@ const badRequest = (data:ActionData) => {
 }
 export const action:ActionFunction = async ({request}) => {
   const userId = await requireUserId(request);
+  if(!userId){
+    throw new Response("Unathorized access",{
+      status:401
+    });
 
+    return json({});
+  }
   const form =await request.formData();
   const name = form.get("name");
   const content = form.get("content");
@@ -61,7 +67,9 @@ export const action:ActionFunction = async ({request}) => {
   const joke = await db.joke.create({
     data:{...fields, jokesterId:userId}
   });
+  // if(!joke){
 
+  // }
   return redirect(`/jokes/${joke.id}`);
 }
 
@@ -113,4 +121,17 @@ export function ErrorBoundary(){
       Something unexpected happened, sorry about that.
     </div>
   )
+}
+
+export function CatchBoundary(){
+  const caught = useCatch();
+
+  if(caught.status === 401){
+    return (
+      <div className="error-container">
+        <p>You must be logged in to create joke</p>
+        <Link to="/login">Login</Link>
+      </div>
+    )
+  }
 }
